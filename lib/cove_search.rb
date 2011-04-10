@@ -1,3 +1,2 @@
 module CoveSearch
-  # Your code goes here...
 end
