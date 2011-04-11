@@ -15,8 +15,11 @@ describe "CoveSearch" do
       end
         
       it "should return 10 items by default" do
-        CoveSearch::Index.redis.zcard('test:set').should == 10
         CoveSearch::Index.search("test", "set").length.should == 10
+      end
+
+      it "should return a limited number of items based on optional argument" do
+        CoveSearch::Index.search("test", "set", 3).length.should == 3
       end
     end
   end
