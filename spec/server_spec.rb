@@ -19,4 +19,32 @@ describe "Server" do
       pending "working on index class"
     end
   end
+
+  describe "POST '/update_index'" do
+    context "unsuccessful update" do
+      before(:each) do
+        post 'update_index'
+      end
+      it "should respond with 401 if post body is empty" do
+        last_response.status.should == 401
+      end
+    
+      it "should return a could not create index in json with the 401" do
+        JSON.parse(last_response.body)['status'].should be
+      end
+    end
+
+    context "successful update" do
+      before(:each) do
+        post 'update_index', :type => "tag", :term => "doda", :db_id => 3
+      end
+      it "should return http success if index updated successfully" do
+        last_response.status.should == 200
+      end
+
+      it "should return positive status in json on successful update" do
+        JSON.parse(last_response.body)['status'].should be
+      end
+    end
+  end
 end

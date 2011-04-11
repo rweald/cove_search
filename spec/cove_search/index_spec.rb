@@ -48,7 +48,6 @@ describe "CoveSearch" do
         Index.add("test", "set", "hello")
         Index.redis.zscore("test:set", "hello").to_i.should be > old_count
       end
-
     end
   end
 end
