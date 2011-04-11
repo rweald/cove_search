@@ -5,7 +5,12 @@ module CoveSearch
       attr_accessor :redis
     end
 
-    @redis = Redis.new
+    if ENV['REDISTOGO_URL']
+      uri = URI.parse(ENV["REDISTOGO_URL"])
+      @redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
+    else
+      @redis = Redis.new
+    end
 
     def self.search(type=nil, query=nil, limit=10)
       raise "Missing Constraints. Must specify a type and query" unless (type && query)
