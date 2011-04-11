@@ -7,16 +7,26 @@ describe "Server" do
   end
 
   describe "GET '/search'" do
-    before(:each) do
-      @response = get '/search', :query => "hello", :type => "tag"
-      @response = JSON.parse(@response.body)
-    end
-    it "should include query in json response" do
-      @response['query'].should == "hello"
-    end
+    context "valid request" do
+      before(:each) do
+        @response = get '/search', :query => "hello", :type => "tag"
+        @response = JSON.parse(@response.body)
+      end
+      it "should include query in json response" do
+        @response['query'].should == "hello"
+      end
 
-    it "should return a list of document that match query" do
-      pending "working on index class"
+      it "should return a list of document that match query" do
+        pending "working on index class"
+      end
+    end
+    context "invalid request" do 
+      before(:each) do
+        get 'search'
+      end
+      it "should respond with 401" do
+        last_response.status.should == 401
+      end
     end
   end
 

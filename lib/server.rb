@@ -4,9 +4,16 @@ require 'cove_search'
 
 include CoveSearch
 
+# You can call this search url to get all the
+# documents for the given query
 get '/search' do
   query = params[:query]
-  docs = Index.search(params[:type], query)
+  begin
+    docs = Index.search(params[:type], query)
+  rescue
+    status = 401
+    return JSON.generate({:status => "invalid parameters"})
+  end
   response = {"query" => query, "results" => docs}
   JSON.generate(response)
 end
