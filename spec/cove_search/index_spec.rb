@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe "CoveSearch" do
+  include CoveSearch
   describe "Index" do
     describe ".search" do
       before(:each) do
-        Index.redis.del 'test:set'
         (1..10).each_with_index do |_,index|
           Index.redis.zadd('test:set', index , index)
         end
@@ -20,6 +20,25 @@ describe "CoveSearch" do
 
       it "should return a limited number of items based on optional argument" do
         CoveSearch::Index.search("test", "set", 3).length.should == 3
+      end
+
+      it "should grab all matches for query another" do
+        CoveSearch::Index.redis.zadd("test:another", 11, "blah")
+        CoveSearch::Index.search("test", "another").should == ["blah"]
+      end
+    end
+
+    describe ".add" do
+      it "should create a new set if one doesn't exist" do
+        Index.redis.exists("test:set").should be_false
+        Index.add("test", "set", "hello")
+        Index.redis.exists("test:set").should be_true
+      end
+
+      it "should increment the count of an existing element" do
+        old_count = Index.redis.zscore("test:set", "hello").to_i
+        Index.add("test", "set", "hello")
+        Index.redis.zscore("test:set", "hello").to_i.should be > old_count
       end
     end
   end
