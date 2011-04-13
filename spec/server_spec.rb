@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'server'
+require 'cove_search'
 
 describe "Server" do
   def app
@@ -7,8 +8,9 @@ describe "Server" do
   end
 
   describe "GET '/search'" do
-    context "valid request" do
+    context "valid query parameters" do
       before(:each) do
+        CoveSearch::Index.add("tag", "hello", 3)
         @response = get '/search', :query => "hello", :type => "tag"
         @response = JSON.parse(@response.body)
       end
@@ -17,16 +19,24 @@ describe "Server" do
       end
 
       it "should return a list of document that match query" do
-        pending "working on index class"
+        @response['results'].should == ["3"]
       end
+
     end
-    context "invalid request" do 
+
+    context "no query parameters" do 
       before(:each) do
         get 'search'
       end
-      it "should respond with 401" do
-        #last_response.status.should == 401
+      it "should respond with 200" do
+        last_response.status.should == 200
       end
+
+      it "should return status 'invalid parameters'" do
+        resp = JSON.parse(last_response.body)
+        resp['status'].should == "invalid parameters"
+      end
+
     end
   end
 
@@ -57,4 +67,31 @@ describe "Server" do
       end
     end
   end
+
+
+  describe "GET 'autcomplete'" do
+    before(:each) do
+      CoveSearch::AutoComplete.generate_ngram_index_for_word("hello")
+    end
+
+    def perform_get(query=nil)
+      @response = get '/autocomplete', :query => query
+      @response = JSON.parse(@response.body)
+    end
+
+    context "valid query string" do
+      before(:each) do
+        perform_get('hello')
+      end
+
+      it "should respond with 200" do
+        last_response.status.should == 200
+      end
+
+      it "should return an array of word completions in json" do
+        @response['results'].should == ["hello"]
+      end
+    end
+  end
+
 end

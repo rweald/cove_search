@@ -14,6 +14,6 @@ Rspec.configure do |config|
   config.mock_with :mocha
   config.before(:each) do
     r = Redis.new
-    r.del 'test:set'
+    r.flushdb
   end
 end
