@@ -32,3 +32,12 @@ post '/update_index' do
   Index.add(params[:type], params[:term], params[:db_id])
   JSON.generate({"status" => "successfully indexed item"})
 end
+
+
+get '/autocomplete' do
+  unless params[:query]
+    return JSON.generate({"status" => "must specify a query"})
+  end
+  results = AutoComplete.autocomplete_for_suffix(params[:query])   
+  JSON.generate({"status" => "success", "results" => results})
+end
