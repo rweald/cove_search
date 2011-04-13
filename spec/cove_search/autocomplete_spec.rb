@@ -20,6 +20,14 @@ describe "CoveSearch" do
         AutoComplete.generate_ngram_index_for_word("helly")
         AutoComplete.redis.zrange("autocomplete:hel", 0, 2).should == ["hello", "helly"]
       end
+
+      it "should handle spaces like any other character" do
+        AutoComplete.generate_ngram_index_for_word("hello world")
+        AutoComplete.redis.zrange("autocomplete:hello", 0, 2).should == ["hello world"]
+        AutoComplete.redis.zrange("autocomplete:hello ", 0, 2).should == ["hello world"]
+        AutoComplete.redis.zrange("autocomplete:hello w", 0, 2).should == ["hello world"]
+               
+      end
     end
 
     describe ".autocomplete_for_suffix" do
@@ -40,6 +48,7 @@ describe "CoveSearch" do
     describe ".redis_key" do
       it "should return the autocomplete namespaced key" do
         AutoComplete.redis_key("test").should == "autocomplete:test"
+        AutoComplete.redis_key("").should == "autocomplete:"
       end
     end
   end
