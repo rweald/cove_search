@@ -27,6 +27,13 @@ describe "CoveSearch" do
       it "should return all the words with the given suffix" do
         AutoComplete.generate_ngram_index_for_word("hello")
         AutoComplete.autocomplete_for_suffix("hel").should == ["hello"]
+
+        AutoComplete.generate_ngram_index_for_word("helly")
+        AutoComplete.autocomplete_for_suffix("hel").should == ["hello", "helly"]
+      end
+
+      it "should return an empty array if nothing is found" do
+        AutoComplete.autocomplete_for_suffix("blah").should == []
       end
     end
     
