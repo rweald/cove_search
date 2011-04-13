@@ -10,5 +10,5 @@ Would return the top 3 Documents where doda appeared most.
 #Todo
 1. Write a client that can communicate with the server. 
 2. Integration with activemodel for automatic indexing
-3. *DONE* Ngram search so that we can have partial matches and autocomplete
+3. **DONE** Ngram search so that we can have partial matches and autocomplete
 4. Fuzzy search and sematic search analysis.
