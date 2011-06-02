@@ -48,6 +48,13 @@ describe "CoveSearch" do
         Index.add("test", "set", "hello")
         Index.redis.zscore("test:set", "hello").to_i.should be > old_count
       end
+
+      it "should increment the count by a custom value" do
+        Index.add "test", "set", "hello"
+        old_count = Index.redis.zscore("test:set", "hello").to_i
+        Index.add("test", "set", "hello", 10)
+        Index.redis.zscore("test:set", "hello").to_i.should == 11
+      end
     end
   end
 end
