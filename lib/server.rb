@@ -25,12 +25,15 @@ end
 #retrieve the full object.
 # Also generate the necessary ngram index so we can autocomplete the term
 #EX// post 'update_index', :type => "tag", :term => "doda", :doc_id => 3 
+# You can also add an additional parameter called increment that is the value that 
+# you want to increase the tag weight.
 post '/update_index' do
   unless params[:type] && params[:term] && params[:db_id]
     response.status = 401
     return JSON.generate({"status" => "could not index at this time"})
   end
-  Index.add(params[:type], params[:term], params[:db_id])
+  incrementor = params[:increment] ? params[:increment] : 1
+  Index.add(params[:type], params[:term], params[:db_id], incrementor)
   AutoComplete.generate_ngram_index_for_word(params[:term])
   JSON.generate({"status" => "successfully indexed item"})
 end
