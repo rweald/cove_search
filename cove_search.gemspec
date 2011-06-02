@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'redis-namespace'
   s.add_dependency 'sinatra'
   s.add_dependency 'yajl-ruby'
+  s.add_dependency 'vegas'
   s.add_development_dependency 'rack-test'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'mocha'
