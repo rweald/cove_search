@@ -10,6 +10,27 @@ describe CoveSearch::Client do
       end.returns("results" => [])
       Client.search(:type => "tag", :query => "hello")
     end
+
+    it "should raise an error if the http request fails" do
+      Client.expects(:get).returns()
+      lambda { Client.search(:type => "tag", :query => "hello") }.should raise_error
+    end
+  end
+
+  describe ".update_index" do
+    it "should issue a post request to the search server" do
+      Client.expects(:post).with do |path, parameters|
+        path == "/update_index"
+        parameters == {:type => "tag", :term => "hello", :db_id => 1}
+      end.returns("status" => "success")
+      Client.update_index(:type => "tag", :term => "hello", :db_id => 1)
+    end
+
+    it "should raise an error if the http request fails" do
+      Client.expects(:post).returns()
+      lambda { Client.update_index(:type => "tag", 
+                                   :term => "hello", :db_id => 1) }.should raise_error
+    end
   end
 
 end
