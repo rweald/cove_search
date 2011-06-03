@@ -1,3 +1,4 @@
+require 'rest-client'
 module CoveSearch
   class Client
     class << self
