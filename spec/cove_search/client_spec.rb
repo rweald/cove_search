@@ -33,4 +33,11 @@ describe CoveSearch::Client do
     end
   end
 
+  describe ".clear_index" do
+    it "should make a delete request to server" do
+      Client.expects(:delete).returns("status" => "success")
+      Client.clear_index "tag"
+    end
+  end
+
 end

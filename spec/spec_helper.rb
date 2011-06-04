@@ -14,6 +14,12 @@ Rspec.configure do |config|
   config.mock_with :mocha
   config.before(:each) do
     r = Redis.new
-    r.flushdb
+    r.flushall
   end
 end
+
+def parse_json_response(&block)
+  resp = yield
+  @response = JSON.parse(resp.body)
+end
+

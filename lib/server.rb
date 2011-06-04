@@ -49,11 +49,10 @@ get '/autocomplete' do
   JSON.generate({"status" => "success", "results" => results})
 end
 
-#post '/update_autocomplete' do
-  #unless params[:term]
-    #response.status = 401
-    #response.body = JSON.generate({"status" => "failure", "notice" => "You need to specify a word to index"})
-    #return 
-  #end
-  #JSON.generate({"status" => "success"})
-#end
+delete '/clear_index' do
+  unless params[:type]
+    return JSON.generate({"status" => "failure", "message" => "must specify a type to delete"})
+  end
+  Index.redis.del(params[:type])
+  JSON.generate({"status" => "success"})
+end

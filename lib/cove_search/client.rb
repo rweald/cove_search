@@ -21,6 +21,11 @@ module CoveSearch
       end
     end
 
+    def self.clear_index(type)
+      response = delete("/clear_index", {"type" => type})
+      raise "Index could not be deleted" unless response["status"] =~ /success/
+    end
+
     def self.get(path, parameters)
       uri = "http://" + @host + path + format_query_string(parameters)
       response = RestClient.get uri
@@ -30,6 +35,12 @@ module CoveSearch
     def self.post(path, parameters)
       uri = "http://" + @host + path
       response = RestClient.post uri, escape(parameters)
+      JSON.parse(response)
+    end
+
+    def self.delete(path, parameters)
+      uri = "http://" + @host + path + format_query_string(parameters)
+      response = RestClient.delete uri
       JSON.parse(response)
     end
 

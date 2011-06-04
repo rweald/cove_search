@@ -94,4 +94,19 @@ describe "Server" do
     end
   end
 
+  describe "DELETE 'clear_index'" do
+    before(:each) do
+      Index.add("test:tag", "hello", 1)
+    end
+    it "should return failure and message if no type given" do
+      parse_json_response { delete "clear_index" }
+      @response["status"].should == "failure"
+      @response["message"].should be
+    end
+
+    it "should clear the index if successful" do
+      parse_json_response { delete "clear_index", :type => "test:tag" }
+      Index.redis.exists("test:tag").should be_false
+    end
+  end
 end
