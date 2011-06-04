@@ -1,4 +1,6 @@
 require "redis"
+require 'redis-namespace'
+
 module CoveSearch
   class Index
     class << self
@@ -7,11 +9,12 @@ module CoveSearch
 
     if ENV['REDISTOGO_URL']
       uri = URI.parse(ENV["REDISTOGO_URL"])
-      @redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
+      rc = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
     else
-      @redis = Redis.new
+      rc = Redis.new
     end
-
+    @redis = Redis::Namespace.new "search_index", :redis => rc
+    
     def self.search(type=nil, query=nil, limit=10)
       raise "Missing Constraints. Must specify a type and query" unless (type && query)
       @redis.zrevrange("#{type}:#{query}", 0, limit - 1)
