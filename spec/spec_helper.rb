@@ -9,7 +9,7 @@ require "cove_search"
 
 ENV['RACK_ENV'] = 'test'
 
-Rspec.configure do |config|
+RSpec.configure do |config|
   config.include Rack::Test::Methods
   config.mock_with :mocha
   config.before(:each) do
