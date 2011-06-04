@@ -29,8 +29,16 @@ module CoveSearch
 
     def self.post(path, parameters)
       uri = "http://" + @host + path
-      response = RestClient.post uri, parameters
+      response = RestClient.post uri, escape(parameters)
       JSON.parse(response)
+    end
+
+    def escape(parameters)
+      new_hash = Hash.new
+      parameters.each do |key,value|
+        new_hash[key] = URI.escape(value)
+      end
+      new_hash
     end
 
     def self.format_query_string(parameters)
@@ -38,9 +46,9 @@ module CoveSearch
       query_string = ""
       parameters.each_pair do |key, value|
         if index == 0
-          query_string << "?#{key}=#{value}"
+          query_string << "?#{key}=#{URI.escape(value)}"
         else
-          query_string << "&#{key}=#{value}"
+          query_string << "&#{key}=#{URI.escape(value)}"
         end
         index += 1
       end

@@ -4,6 +4,7 @@ PATH
     cove_search (0.0.1)
       redis
       redis-namespace
+      rest-client
       sinatra
       vegas
       yajl-ruby
@@ -12,6 +13,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     diff-lcs (1.1.2)
+    mime-types (1.16)
     mocha (0.9.12)
     rack (1.2.2)
     rack-test (0.5.7)
@@ -19,6 +21,8 @@ GEM
     redis (2.2.0)
     redis-namespace (1.0.3)
       redis (< 3.0.0)
+    rest-client (1.6.1)
+      mime-types (>= 1.16)
     rspec (2.5.0)
       rspec-core (~> 2.5.0)
       rspec-expectations (~> 2.5.0)
