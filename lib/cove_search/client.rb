@@ -36,7 +36,7 @@ module CoveSearch
     def self.escape(parameters)
       new_hash = Hash.new
       parameters.each do |key,value|
-        new_hash[key] = URI.escape(value)
+        new_hash[key] = URI.escape(value.to_s.downcase)
       end
       new_hash
     end
@@ -46,9 +46,9 @@ module CoveSearch
       query_string = ""
       parameters.each_pair do |key, value|
         if index == 0
-          query_string << "?#{key}=#{URI.escape(value)}"
+          query_string << "?#{key}=#{URI.escape(value.to_s.downcase)}"
         else
-          query_string << "&#{key}=#{URI.escape(value)}"
+          query_string << "&#{key}=#{URI.escape(value.to_s.downcase)}"
         end
         index += 1
       end
