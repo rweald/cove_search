@@ -12,7 +12,7 @@ ENV['RACK_ENV'] = 'test'
 RSpec.configure do |config|
   config.include Rack::Test::Methods
   config.mock_with :mocha
-  config.before(:each) do
+  config.after(:each) do
     r = Redis.new
     r.flushall
   end
