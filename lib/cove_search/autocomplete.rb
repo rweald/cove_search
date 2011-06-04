@@ -5,13 +5,15 @@ module CoveSearch
       attr_reader :redis
     end
     #setup the connection to redis
+    
     if ENV['REDISTOGO_URL']
       uri = URI.parse(ENV["REDISTOGO_URL"])
-      @redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
+      rc = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
     else
-      @redis = Redis.new
+      rc = Redis.new
     end
     
+    @redis = Redis::Namespace.new "search_index", :redis => rc
 
     def self.generate_ngram_index_for_word(word)
       (2..word.length).each do |i|

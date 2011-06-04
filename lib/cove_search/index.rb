@@ -1,6 +1,3 @@
-require "redis"
-require 'redis-namespace'
-
 module CoveSearch
   class Index
     class << self
@@ -13,6 +10,7 @@ module CoveSearch
     else
       rc = Redis.new
     end
+
     @redis = Redis::Namespace.new "search_index", :redis => rc
     
     def self.search(type=nil, query=nil, limit=10)
