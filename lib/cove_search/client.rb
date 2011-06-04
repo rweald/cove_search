@@ -33,7 +33,7 @@ module CoveSearch
       JSON.parse(response)
     end
 
-    def escape(parameters)
+    def self.escape(parameters)
       new_hash = Hash.new
       parameters.each do |key,value|
         new_hash[key] = URI.escape(value)
