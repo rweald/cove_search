@@ -5,7 +5,7 @@ module CoveSearch
       attr_accessor :host
     end
 
-    @host = "127.0.0.1:5678"
+    @host = "http://127.0.0.1:5678"
 
     def self.update_index(parameters)
       response = post("/update_index", parameters)
@@ -27,19 +27,19 @@ module CoveSearch
     end
 
     def self.get(path, parameters)
-      uri = "http://" + @host + path + format_query_string(parameters)
+      uri = @host + path + format_query_string(parameters)
       response = RestClient.get uri
       JSON.parse(response)
     end
 
     def self.post(path, parameters)
-      uri = "http://" + @host + path
+      uri = @host + path
       response = RestClient.post uri, escape(parameters)
       JSON.parse(response)
     end
 
     def self.delete(path, parameters)
-      uri = "http://" + @host + path + format_query_string(parameters)
+      uri = @host + path + format_query_string(parameters)
       response = RestClient.delete uri
       JSON.parse(response)
     end
