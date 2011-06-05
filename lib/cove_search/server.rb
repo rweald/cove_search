@@ -34,7 +34,7 @@ class SearchServer < Sinatra::Base
     end
     incrementor = params[:increment] ? params[:increment] : 1
     Index.add(params[:type], params[:term], params[:db_id], incrementor)
-    AutoComplete.generate_ngram_index_for_word(params[:term])
+    AutoComplete.generate_ngram_index_for_word(params[:term], params[:type])
     JSON.generate({"status" => "successfully indexed item"})
   end
 
@@ -42,10 +42,11 @@ class SearchServer < Sinatra::Base
   # Call this api method when you want to get a list of all the 
   # possible autocompletions for a given suffix 
   get '/autocomplete' do
-    unless params[:query]
+    unless params[:query] && params[:type]
+      response.status = 401
       return JSON.generate({"status" => "must specify a query"})
     end
-    results = AutoComplete.autocomplete_for_suffix(params[:query])   
+    results = AutoComplete.autocomplete_for_suffix(params[:query], params[:type])   
     JSON.generate({"status" => "success", "results" => results})
   end
 

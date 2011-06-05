@@ -71,19 +71,19 @@ describe "Server" do
   end
 
 
-  describe "GET 'autcomplete'" do
+  describe "GET 'autocomplete'" do
     before(:each) do
-      AutoComplete.generate_ngram_index_for_word("hello")
+      AutoComplete.generate_ngram_index_for_word("hello", "test:tag")
     end
 
-    def perform_get(query=nil)
-      @response = get '/autocomplete', :query => query
+    def perform_get(query=nil, type=nil)
+      @response = get '/autocomplete', :query => query, :type => type
       @response = JSON.parse(@response.body)
     end
 
     context "valid query string" do
       before(:each) do
-        perform_get('hello')
+        perform_get('hello', "test:tag")
       end
 
       it "should respond with 200" do
@@ -92,6 +92,16 @@ describe "Server" do
 
       it "should return an array of word completions in json" do
         @response['results'].should == ["hello"]
+      end
+    end
+    context "invalid query string" do
+      it "should return 401 if no type provided" do
+        perform_get("hello")
+        last_response.status.should == 401
+      end
+      it "should return 401 if no query given" do
+        perform_get(nil, "test:tag")
+        last_response.status.should == 401
       end
     end
   end
