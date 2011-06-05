@@ -3,12 +3,13 @@ require 'yajl/json_gem'
 require 'cove_search'
 
 class SearchServer < Sinatra::Base
+  include CoveSearch
   # You can call this search url to get all the
   # documents for the given query
   get '/search' do
     query = params[:query]
     begin
-      docs = CoveSearch::Index.search(params[:type], query)
+      docs = Index.search(params[:type], query)
     rescue
       status = 401
       return JSON.generate({:status => "invalid parameters"})
@@ -32,8 +33,8 @@ class SearchServer < Sinatra::Base
       return JSON.generate({"status" => "could not index at this time"})
     end
     incrementor = params[:increment] ? params[:increment] : 1
-    CoveSearch::Index.add(params[:type], params[:term], params[:db_id], incrementor)
-    CoveSearch::AutoComplete.generate_ngram_index_for_word(params[:term])
+    Index.add(params[:type], params[:term], params[:db_id], incrementor)
+    AutoComplete.generate_ngram_index_for_word(params[:term])
     JSON.generate({"status" => "successfully indexed item"})
   end
 
@@ -44,7 +45,7 @@ class SearchServer < Sinatra::Base
     unless params[:query]
       return JSON.generate({"status" => "must specify a query"})
     end
-    results = CoveSearch::AutoComplete.autocomplete_for_suffix(params[:query])   
+    results = AutoComplete.autocomplete_for_suffix(params[:query])   
     JSON.generate({"status" => "success", "results" => results})
   end
 
@@ -52,7 +53,7 @@ class SearchServer < Sinatra::Base
     unless params[:type]
       return JSON.generate({"status" => "failure", "message" => "must specify a type to delete"})
     end
-    CoveSearch::Index.redis.del(params[:type])
+    Index.redis.del(params[:type])
     JSON.generate({"status" => "success"})
   end
 end

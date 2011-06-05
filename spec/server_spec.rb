@@ -8,10 +8,11 @@ describe "Server" do
     SearchServer
   end
 
+  include CoveSearch
   describe "GET '/search'" do
     context "valid query parameters" do
       before(:each) do
-        CoveSearch::Index.add("tag", "hello", 3)
+        Index.add("tag", "hello", 3)
         @response = get '/search', :query => "hello", :type => "tag"
         @response = JSON.parse(@response.body)
       end
@@ -72,7 +73,7 @@ describe "Server" do
 
   describe "GET 'autcomplete'" do
     before(:each) do
-      CoveSearch::AutoComplete.generate_ngram_index_for_word("hello")
+      AutoComplete.generate_ngram_index_for_word("hello")
     end
 
     def perform_get(query=nil)
@@ -97,7 +98,7 @@ describe "Server" do
 
   describe "DELETE 'clear_index'" do
     before(:each) do
-      CoveSearch::Index.add("test:tag", "hello", 1)
+      Index.add("test:tag", "hello", 1)
     end
     it "should return failure and message if no type given" do
       parse_json_response { delete "clear_index" }
@@ -107,7 +108,7 @@ describe "Server" do
 
     it "should clear the index if successful" do
       parse_json_response { delete "clear_index", :type => "test:tag" }
-      CoveSearch::Index.redis.exists("test:tag").should be_false
+      Index.redis.exists("test:tag").should be_false
     end
   end
 end

@@ -11,20 +11,20 @@ describe "CoveSearch" do
       end
 
       it "should throw an exception if on type given" do
-        lambda{CoveSearch::Index.search}.should raise_error
+        lambda{Index.search}.should raise_error
       end
         
       it "should return 10 items by default" do
-        CoveSearch::Index.search("test", "set").length.should == 10
+        Index.search("test", "set").length.should == 10
       end
 
       it "should return a limited number of items based on optional argument" do
-        CoveSearch::Index.search("test", "set", 3).length.should == 3
+        Index.search("test", "set", 3).length.should == 3
       end
 
       it "should grab all matches for query another" do
-        CoveSearch::Index.redis.zadd("test:another", 11, "blah")
-        CoveSearch::Index.search("test", "another").should == ["blah"]
+        Index.redis.zadd("test:another", 11, "blah")
+        Index.search("test", "another").should == ["blah"]
       end
     end
 
