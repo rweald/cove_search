@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'server'
+require 'cove_search/server'
 require 'cove_search'
 
 describe "Server" do

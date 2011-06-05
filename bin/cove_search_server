@@ -2,7 +2,7 @@
 
 $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
 
-require "server"
 require 'vegas'
+require "cove_search/server"
 
-Vegas::Runner.new(Sinatra::Application, 'server')
+Vegas::Runner.new(SearchServer, 'search_server')
