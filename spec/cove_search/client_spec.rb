@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'cove_search/client'
 describe CoveSearch::Client do
-
+  include CoveSearch
   describe ".search" do
     it "should issue get request to the cove_search server" do
       Client.expects(:get).with do |path, parameters|

@@ -2,10 +2,7 @@ require 'spec_helper'
 
 describe "CoveSearch" do
   describe "AutoComplete" do
-    before(:each) do
-      include CoveSearch
-    end
-
+    include CoveSearch
     describe ".generate_ngram_index_for_word" do
       it "should create the necessary stubs if they dont already exist" do
         AutoComplete.redis.exists("autocomplete:hel").should be_false

@@ -4,7 +4,8 @@ require 'cove_search'
 
 describe "Server" do
   def app
-    Sinatra::Application
+    #Sinatra::Application
+    SearchServer
   end
 
   describe "GET '/search'" do
@@ -96,7 +97,7 @@ describe "Server" do
 
   describe "DELETE 'clear_index'" do
     before(:each) do
-      Index.add("test:tag", "hello", 1)
+      CoveSearch::Index.add("test:tag", "hello", 1)
     end
     it "should return failure and message if no type given" do
       parse_json_response { delete "clear_index" }
@@ -106,7 +107,7 @@ describe "Server" do
 
     it "should clear the index if successful" do
       parse_json_response { delete "clear_index", :type => "test:tag" }
-      Index.redis.exists("test:tag").should be_false
+      CoveSearch::Index.redis.exists("test:tag").should be_false
     end
   end
 end
