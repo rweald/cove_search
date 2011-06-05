@@ -54,7 +54,7 @@ class SearchServer < Sinatra::Base
     unless params[:type]
       return JSON.generate({"status" => "failure", "message" => "must specify a type to delete"})
     end
-    Index.redis.del(params[:type])
+    Index.redis.keys("#{params[:type]}*").map { |k| Index.redis.del k }
     JSON.generate({"status" => "success"})
   end
 end
