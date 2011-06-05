@@ -4,6 +4,9 @@ require 'cove_search'
 
 class SearchServer < Sinatra::Base
   include CoveSearch
+
+  enable :logging
+
   # You can call this search url to get all the
   # documents for the given query
   get '/search' do
