@@ -56,7 +56,7 @@ class SearchServer < Sinatra::Base
     end
     if callback
       content_type = :js
-      response = "#{callback}(#{json})"
+      response = "#{callback} (#{json})"
     else
       response = json
     end
