@@ -45,12 +45,20 @@ class SearchServer < Sinatra::Base
   # Call this api method when you want to get a list of all the 
   # possible autocompletions for a given suffix 
   get '/autocomplete' do
+    callback = params.delete("callback")
+    json = nil
     unless params[:query] && params[:type]
       response.status = 401
-      return JSON.generate({"status" => "must specify a query"})
+      json = JSON.generate({"status" => "must specify a query"})
+    else
+      results = AutoComplete.autocomplete_for_suffix(params[:query], params[:type])   
+      json = JSON.generate({"status" => "success", "results" => results})
     end
-    results = AutoComplete.autocomplete_for_suffix(params[:query], params[:type])   
-    JSON.generate({"status" => "success", "results" => results})
+    if callback
+      response = "#{callback}(#{json})"
+    else
+      response = json
+    end
   end
 
   delete '/clear_index' do
