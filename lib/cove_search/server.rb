@@ -55,6 +55,7 @@ class SearchServer < Sinatra::Base
       json = JSON.generate({"status" => "success", "results" => results})
     end
     if callback
+      content_type = :js
       response = "#{callback}(#{json})"
     else
       response = json
