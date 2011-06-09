@@ -7,6 +7,10 @@ class SearchServer < Sinatra::Base
 
   enable :logging
 
+  get '/' do
+    "I hate Vegas"
+  end
+
   # You can call this search url to get all the
   # documents for the given query
   get '/search' do
