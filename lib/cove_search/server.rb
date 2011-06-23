@@ -51,6 +51,8 @@ class SearchServer < Sinatra::Base
       response.status = 401
       json = JSON.generate({"status" => "must specify a query"})
     else
+      params[:query] = URI.escape(params[:query])
+      puts "autocomplete query: #{params[:query]}"
       results = AutoComplete.autocomplete_for_suffix(params[:query], params[:type])   
       json = JSON.generate({"status" => "success", "results" => results})
     end
